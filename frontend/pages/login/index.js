@@ -11,7 +11,7 @@ function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/user/login', {
+      const response = await axios.post('http://172.214.80.89:8080/api/user/login', {
         username,
         password
       });

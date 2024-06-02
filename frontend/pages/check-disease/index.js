@@ -44,7 +44,7 @@ function Navbar() {
   useEffect(() => {
     const fetchProfile = async () => {
       if (userId) {
-        const res = await axios.get(`http://localhost:8080/api/user/one/${userId}`);
+        const res = await axios.get(`http://172.214.80.89:8080/api/user/one/${userId}`);
         console.log(res.data);
         setUserName(res.data.first_name + ' ' + res.data.last_name);
       }
@@ -141,7 +141,7 @@ function MyComponent() {
         cancelButtonText: 'Batal'
       }).then(async (result) => {
         if (result.isConfirmed) {
-          const response = await fetch(`http://127.0.0.1:8000/predict?user_id=${userId}`, {
+          const response = await fetch(`http://172.214.80.89:8000/predict?user_id=${userId}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

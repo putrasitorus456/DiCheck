@@ -120,7 +120,7 @@ def predict(symptom_data: SymptomData, user_id: str):
             **result
         }
         # Send data to the record API
-        response = requests.post("http://localhost:8080/api/record/", json=data)
+        response = requests.post("http://172.214.80.89:8080/api/record/", json=data)
         if response.status_code != 200:
             logger.error(f"Error in /api/record/ endpoint: {response.text}")
             raise HTTPException(status_code=500, detail="Could not record prediction")

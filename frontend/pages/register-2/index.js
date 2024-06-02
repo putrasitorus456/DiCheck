@@ -24,7 +24,7 @@ function RegisterPage2() {
     console.log('Data yang disimpan', newData);
 
     try {
-      const response = await axios.post('http://localhost:8080/api/user/', newData);
+      const response = await axios.post('http://172.214.80.89:8080/api/user/', newData);
       console.log('Register berhasil', response.data);
       localStorage.removeItem('registerData');
       toast.success('Register berhasil', {
