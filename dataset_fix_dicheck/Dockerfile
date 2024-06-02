@@ -1,10 +1,14 @@
-FROM python:3.11.9
+FROM python:3.9-slim
 
-WORKDIR /app
+WORKDIR /usr/src/app
+
+COPY requirements.txt ./
+
+#install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN python -m venv venv
-RUN . venv/bin/activate && pip install -r requirements.txt
+EXPOSE 8000
 
-CMD ["/bin/bash", "-c", ". venv/bin/activate && uvicorn app:app --reload"]
+CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "app:app", "--bind", "0.0.0.0:8000"]
