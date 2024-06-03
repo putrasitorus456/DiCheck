@@ -42,7 +42,7 @@ function Navbar() {
   useEffect(() => {
     const fetchProfile = async () => {
       if (userId) {
-        const res = await axios.get(`http://172.214.80.89:8080/api/user/one/${userId}`);
+        const res = await axios.get(`http://localhost:8080/api/user/one/${userId}`);
         console.log(res.data);
         setUserName(res.data.first_name + ' ' + res.data.last_name);
       }
@@ -112,7 +112,7 @@ export async function getServerSideProps(context) {
   const { id } = context.params;
 
   try {
-    const res = await axios.get(`http://172.214.80.89:8080/api/record/record/${id}`);
+    const res = await axios.get(`http://localhost:8080/api/record/record/${id}`);
     const check = res.data;
 
     if (!check) {
@@ -159,7 +159,7 @@ function MyComponent() {
     async function fetchChecks() {
       if (id) {
         try {
-          const response = await axios.get(`http://172.214.80.89:8080/api/record/record/${id}`);
+          const response = await axios.get(`http://localhost:8080/api/record/record/${id}`);
           setChecks(response.data);
         } catch (error) {
           console.error('Error fetching check records:', error);
@@ -174,7 +174,7 @@ function MyComponent() {
     async function fetchTotalChecks() {
       if (userId) {
         try {
-          const response = await axios.get(`http://172.214.80.89:8080/api/record/total/${userId}`);
+          const response = await axios.get(`http://localhost:8080/api/record/total/${userId}`);
           setTotalChecks(response.data.totalRecords);
         } catch (error) {
           console.error('Error fetching total checks:', error);
@@ -185,7 +185,7 @@ function MyComponent() {
     async function fetchTotalChecksToday() {
       if (userId) {
         try {
-          const response = await axios.get(`http://172.214.80.89:8080/api/record/total_today/${userId}`);
+          const response = await axios.get(`http://localhost:8080/api/record/total_today/${userId}`);
           setTotalChecksToday(response.data.totalRecords);
         } catch (error) {
           console.error('Error fetching total checks today:', error);
@@ -196,7 +196,7 @@ function MyComponent() {
     async function fetchLatestCheckTime() {
       if (userId) {
         try {
-          const response = await axios.get(`http://172.214.80.89:8080/api/record/latest_record/${userId}`);
+          const response = await axios.get(`http://localhost:8080/api/record/latest_record/${userId}`);
           setLastCheckTime(response.data.latestRecordTime);
         } catch (error) {
           console.error('Error fetching latest check time:', error);

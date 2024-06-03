@@ -44,7 +44,7 @@ function Navbar() {
   useEffect(() => {
     const fetchProfile = async () => {
       if (userId) {
-        const res = await axios.get(`http://172.214.80.89:8080/api/user/one/${userId}`);
+        const res = await axios.get(`http://localhost:8080/api/user/one/${userId}`);
         console.log(res.data);
         setUserName(res.data.first_name + ' ' + res.data.last_name);
       }
@@ -125,38 +125,71 @@ function MyComponent() {
 
     const handleCheckNow = async () => {
       if (selectedOptions.length === 0) {
-        toast.error('Mohon pilih gejala yang dialami!', {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        return;
-      }
-    
-      Swal.fire({
-        title: 'Konfirmasi',
-        text: 'Deteksi ini pakai teknologi Machine Learning, tapi nggak selalu 100% bener. Cuma jadikan referensi awal aja, ya. Lebih baik konsultasi sama dokter buat langkah selanjutnya 😊',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Okey, saya mengerti 👍',
-        cancelButtonText: 'Batal'
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          const response = await fetch(`http://172.214.80.89:8000/predict?user_id=${userId}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              symptoms: selectedOptions.map(option => option.value),
-            }),
+          toast.error('Mohon pilih gejala yang dialami!', {
+              position: "top-center",
+              autoClose: 2000,
           });
-    
-          const data = await response.json();
-    
-          router.push(`/${data.record_id}`);
-        }
+          return;
+      }
+  
+      Swal.fire({
+          title: 'Konfirmasi',
+          text: 'Deteksi ini pakai teknologi Machine Learning, tapi nggak selalu 100% bener. Cuma jadikan referensi awal aja, ya. Lebih baik konsultasi sama dokter buat langkah selanjutnya 😊',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Okey, saya mengerti 👍',
+          cancelButtonText: 'Batal'
+      }).then(async (result) => {
+          if (result.isConfirmed) {
+              try {
+                  const response = await fetch(`http://127.0.0.1:8000/predict?user_id=${userId}`, {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                          symptoms: selectedOptions.map(option => option.value),
+                      }),
+                  });
+  
+                  const responseData = await response.json();
+  
+                  await sendDataToGoogleForms(userId);
+  
+                  router.push(`/${responseData.record_id}`);
+              } catch (error) {
+                  console.error('Error handling check:', error);
+                  toast.error('Terjadi kesalahan saat melakukan pengecekan, silakan coba lagi nanti!', {
+                      position: "top-center",
+                      autoClose: 2000,
+                  });
+              }
+          }
       });
+  };
+  async function sendDataToGoogleForms(userId) {
+    const data = {
+      'entry.281987936': userId,
+      'entry.619457657': "check-disease",
+      'entry.1151706252': new Date().toLocaleString(),
+      'entry.1938932446': ""
     };
+  
+    try {
+      const response = await fetch('http://localhost:3001/sendDataToGoogleForms', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      console.log('Data sent to Google Forms:', await response.json());
+    } catch (error) {
+      console.error('Error sending data to Google Forms:', error);
+    }
+  }
+  
 
     const options = [
       { value: 'itching', label: 'Itching' },
@@ -293,8 +326,7 @@ function MyComponent() {
       { value: 'yellow_crust_ooze', label: 'Yellow Crust Ooze' },
       { value: 'prognosis', label: 'Prognosis' }
   ];
-   
-  
+
     return (
       <div className="p-10 bg-slate-50 max-md:px-5 w-full h-screen">
         <ToastContainer />

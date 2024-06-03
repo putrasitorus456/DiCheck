@@ -28,7 +28,7 @@ function RegisterPage() {
     }
   
     // Check if username exists
-    const response = await fetch('http://172.214.80.89:8080/api/user/check_username', {
+    const response = await fetch('http://localhost:8080/api/user/check_username', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
