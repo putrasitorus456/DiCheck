@@ -4,6 +4,29 @@ import Button1 from "@/components/Button/button1";
 import ArticleCard from "@/components/ArticleCard/ArticleCard";
 
 function MyComponent() {
+
+  const handleArticleClick = async (index, article) => {
+    const date = new Date();
+    const optionstime = { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDate = date.toLocaleDateString('id-ID', optionstime);
+    const values = [
+      ["", formattedDate, "read article", `article-${index + 1} (${article.title})`]
+    ];
+
+    await fetch('http://localhost:9090/updateSpreadsheet', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ values }),
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+  };
+
   return (
     <div className="flex flex-col pb-16 bg-white">
         <div 
@@ -51,6 +74,15 @@ function MyComponent() {
                 imgAlt="Manfaat Olahraga Rutin untuk Kesehatan Mental"
                 href="/articles/article-1"
                 width="w-[30%]"
+                onClick={() => handleArticleClick(0, {
+                  date: "04 June 2023",
+                  title: "Manfaat Olahraga Rutin untuk Kesehatan Mental",
+                  description: "Olahraga tidak hanya penting untuk kesehatan fisik, tetapi juga memiliki banyak manfaat untuk kesehatan mental.",
+                  imgSrc: "/images/olahraga_2.png",
+                  imgAlt: "Manfaat Olahraga Rutin untuk Kesehatan Mental",
+                  href: "/articles/article-1",
+                  width: "w-[30%]"
+                })}
                 />
                 <ArticleCard
                 date="03 June 2023"
@@ -60,8 +92,17 @@ function MyComponent() {
                 imgAlt="Pentingnya Vaksinasi dalam Mencegah Penyakit Menular"
                 href="/articles/article-2"
                 width="w-[30%]"
-                />
-                <ArticleCard
+                onClick={() => handleArticleClick(1, {
+                  date: "03 June 2023",
+                  title: "Pentingnya Vaksinasi dalam Mencegah Penyakit Menular",
+                  description: "Vaksinasi adalah salah satu intervensi kesehatan masyarakat yang paling efektif dalam mencegah penyebaran penyakit menular.",
+                  imgSrc: "/images/vaksin_2.png",
+                  imgAlt: "Pentingnya Vaksinasi dalam Mencegah Penyakit Menular",
+                  href: "/articles/article-2",
+                  width: "w-[30%]"
+                })}
+              />
+              <ArticleCard
                 date="01 June 2023"
                 title="Pentingnya Pola Makan Sehat untuk Mencegah Penyakit Kronis"
                 description="Pola makan sehat adalah kunci untuk mencegah berbagai penyakit kronis seperti diabetes, penyakit jantung, dan kanker."
@@ -69,7 +110,16 @@ function MyComponent() {
                 imgAlt="Pentingnya Pola Makan Sehat untuk Mencegah Penyakit Kronis"
                 href="/articles/article-3"
                 width="w-[30%]"
-                />
+                onClick={() => handleArticleClick(2, {
+                  date: "01 June 2023",
+                  title: "Pentingnya Pola Makan Sehat untuk Mencegah Penyakit Kronis",
+                  description: "Pola makan sehat adalah kunci untuk mencegah berbagai penyakit kronis seperti diabetes, penyakit jantung, dan kanker.",
+                  imgSrc: "/images/food_2.png",
+                  imgAlt: "Pentingnya Pola Makan Sehat untuk Mencegah Penyakit Kronis",
+                  href: "/articles/article-3",
+                  width: "w-[30%]"
+                })}
+              />
             </div>
             </section>
       </main>

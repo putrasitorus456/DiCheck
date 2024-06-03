@@ -20,6 +20,27 @@ function LoginPage() {
         console.log('Login berhasil');
         setUser(response.data.User);
         localStorage.setItem('user', JSON.stringify(response.data.User));
+
+        const date = new Date();
+        const optionstime = { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit' };
+        const formattedDate = date.toLocaleDateString('id-ID', optionstime);
+        const values = [
+          [response.data.User._id, formattedDate, "login", ""]
+        ];
+    
+        await fetch('http://localhost:9090/updateSpreadsheet', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ values }),
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
         toast.success('Login berhasil', {
           position: "top-center",
           autoClose: 1000

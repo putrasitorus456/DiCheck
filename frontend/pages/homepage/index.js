@@ -109,6 +109,32 @@ function Articles() {
     }
   ];
 
+  const handleArticleClick = async (index, article) => {
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    const user_id = user._id;
+
+    const date = new Date();
+    const optionstime = { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDate = date.toLocaleDateString('id-ID', optionstime);
+    const values = [
+      [user_id, formattedDate, "read article", `article-${index + 1} (${article.title})`]
+    ];
+
+    await fetch('http://localhost:9090/updateSpreadsheet', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ values }),
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+  };
+
   return (
     <article className="flex flex-col w-full max-md:ml-0 max-md:w-full">
       <div className="flex flex-col grow px-9 py-8 w-full font-medium bg-white rounded-3xl border border-violet-100 border-solid shadow-sm max-md:px-5 max-md:mt-10 max-md:max-w-full">
@@ -132,6 +158,7 @@ function Articles() {
               imgAlt={article.imgAlt}
               href={article.href}
               className="w-full"
+              onClick={() => handleArticleClick(index, article)}
             />
           ))}
         </div>

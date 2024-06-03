@@ -103,92 +103,88 @@ function Navbar() {
 }
 
 function MyComponent() {
-    const [selectedOptions, setSelectedOptions] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [userId, setUserId] = useState('');
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState('');
 
-    const router = useRouter();
+  const router = useRouter();
 
-    useEffect(() => {
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (!user) {
-        router.push('/login');
-      } else {
-        setLoading(false);
-        setUserId(user._id);
-      }
-    }, [router]);
-
-    if (loading) {
-      return <div>Loading...</div>;
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+      router.push('/login');
+    } else {
+      setLoading(false);
+      setUserId(user._id);
     }
+  }, [router]);
 
-    const handleCheckNow = async () => {
-      if (selectedOptions.length === 0) {
-          toast.error('Mohon pilih gejala yang dialami!', {
-              position: "top-center",
-              autoClose: 2000,
-          });
-          return;
-      }
-  
-      Swal.fire({
-          title: 'Konfirmasi',
-          text: 'Deteksi ini pakai teknologi Machine Learning, tapi nggak selalu 100% bener. Cuma jadikan referensi awal aja, ya. Lebih baik konsultasi sama dokter buat langkah selanjutnya 😊',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Okey, saya mengerti 👍',
-          cancelButtonText: 'Batal'
-      }).then(async (result) => {
-          if (result.isConfirmed) {
-              try {
-                  const response = await fetch(`http://127.0.0.1:8000/predict?user_id=${userId}`, {
-                      method: 'POST',
-                      headers: {
-                          'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({
-                          symptoms: selectedOptions.map(option => option.value),
-                      }),
-                  });
-  
-                  const responseData = await response.json();
-  
-                  await sendDataToGoogleForms(userId);
-  
-                  router.push(`/${responseData.record_id}`);
-              } catch (error) {
-                  console.error('Error handling check:', error);
-                  toast.error('Terjadi kesalahan saat melakukan pengecekan, silakan coba lagi nanti!', {
-                      position: "top-center",
-                      autoClose: 2000,
-                  });
-              }
-          }
-      });
-  };
-  async function sendDataToGoogleForms(userId) {
-    const data = {
-      'entry.281987936': userId,
-      'entry.619457657': "check-disease",
-      'entry.1151706252': new Date().toLocaleString(),
-      'entry.1938932446': ""
-    };
-  
-    try {
-      const response = await fetch('http://localhost:3001/sendDataToGoogleForms', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-  
-      console.log('Data sent to Google Forms:', await response.json());
-    } catch (error) {
-      console.error('Error sending data to Google Forms:', error);
-    }
+  if (loading) {
+    return <div>Loading...</div>;
   }
+
+  const handleCheckNow = async () => {
+    if (selectedOptions.length === 0) {
+        toast.error('Mohon pilih gejala yang dialami!', {
+            position: "top-center",
+            autoClose: 2000,
+        });
+        return;
+    }
+
+    Swal.fire({
+        title: 'Konfirmasi',
+        text: 'Deteksi ini pakai teknologi Machine Learning, tapi nggak selalu 100% bener. Cuma jadikan referensi awal aja, ya. Lebih baik konsultasi sama dokter buat langkah selanjutnya 😊',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Okey, saya mengerti 👍',
+        cancelButtonText: 'Batal'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+              const response = await fetch(`http://127.0.0.1:8000/predict?user_id=${userId}`, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                      symptoms: selectedOptions.map(option => option.value),
+                  }),
+              });
+          
+              const responseData = await response.json();
+          
+              const date = new Date();
+              const optionstime = { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit' };
+              const formattedDate = date.toLocaleDateString('id-ID', optionstime);
+              const values = [
+                [userId, formattedDate, "checking disease", ""]
+              ];
+          
+              await fetch('http://localhost:9090/updateSpreadsheet', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ values }),
+              })
+              .then(response => response.json())
+              .then(data => console.log(data))
+              .catch((error) => {
+                  console.error('Error:', error);
+              });
+          
+              router.push(`/${responseData.record_id}`);
+          } catch (error) {
+              console.error('Error handling check:', error);
+              toast.error('Terjadi kesalahan saat melakukan pengecekan, silakan coba lagi nanti!', {
+                  position: "top-center",
+                  autoClose: 2000,
+              });
+          }
+        }
+    });
+  };
   
 
     const options = [
