@@ -613,6 +613,13 @@ function MyComponent() {
                       </motion.div>
                     )}
                   </div>
+                  <div>
+                    <Link href={`https://cari-artikel-alodokter.vercel.app/api/cari-artikel?disease=${check.disease}`}>
+                      <button className="px-10 py-4 text-sm font-bold tracking-wide leading-5 text-center text-white hover:bg-gray-900 whitespace-nowrap bg-gray-600 rounded-md max-md:px-5 max-md:mt-10 max-md:max-w-full" style={{ fontFamily: 'Montserrat-Bold', alignSelf: 'center', marginTop: '20px' }}>
+                        Cari Artikel
+                      </button>  
+                    </Link>
+                  </div>
                 </div>
               </Card>
             ))
