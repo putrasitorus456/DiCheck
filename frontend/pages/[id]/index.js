@@ -280,7 +280,7 @@ function MyComponent() {
           'api-key': process.env.NEXT_PUBLIC_EMAIL_SERVICE_API_KEY,
 
         },
-        body: JSON.stringify({ checks: checks, userEmail: 'siswaspero@gmail.com' }),
+        body: JSON.stringify({ checks: checks, userEmail: userEmail}),
       });
  
       const api_key = process.env.NEXT_PUBLIC_EMAIL_SERVICE_API_KEY
