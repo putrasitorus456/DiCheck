@@ -5,6 +5,8 @@ import Link from "next/link";
 import axios from "axios";
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -142,6 +144,7 @@ function MyComponent() {
   const router = useRouter();
   const { id } = router.query;
 
+  const [userEmail, setUserEmail] = useState('');
   const [userId, setUserId] = useState('');
   const [surprise, setSurprise] = useState(false); // Pindahkan ke sini
 
@@ -152,6 +155,7 @@ function MyComponent() {
     } else {
       setLoading(false);
       setUserId(user._id);
+      setUserEmail(user.email)
     }
   }, [router]);
 
@@ -214,6 +218,43 @@ function MyComponent() {
     setTimeout(() => setSurprise(false), 5000);
   };
 
+  const handleSendEmail = async () => {
+    try {
+      const emailServiceUrl = process.env.NEXT_PUBLIC_EMAIL_SERVICE_URL;
+      console.log(emailServiceUrl);
+      const response = await fetch(emailServiceUrl+'/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': process.env.NEXT_PUBLIC_EMAIL_SERVICE_API_KEY,
+
+        },
+        body: JSON.stringify({ checks: checks, userEmail: 'siswaspero@gmail.com' }),
+      });
+ 
+      const api_key = process.env.NEXT_PUBLIC_EMAIL_SERVICE_API_KEY
+      console.log(api_key);
+
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+    }
+
+      const data = await response.json();
+      console.log(data);
+      toast.success('Berhasil Kirim Email', {
+        position: "top-center",
+        autoClose: 1000
+      });
+    } catch (error) {
+      console.error('Error Sending Email ', error);
+      toast.error('Gagal Kirim Email', {
+        position: "top-center",
+        autoClose: 5000
+      });
+    }
+  };
+
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -223,6 +264,7 @@ function MyComponent() {
 
   return (
     <div className="flex flex-col p-10 bg-slate-50 max-md:px-5">
+      <ToastContainer />
       <Navbar />
       <section className="px-8 py-8 mt-10 bg-white rounded-3xl border border-violet-100 border-solid shadow-sm max-md:px-5 max-md:mt-10 max-md:max-w-full">
         <div className="grid grid-cols-3 gap-5 max-md:flex-col max-md:gap-0" style={{ gridTemplateColumns: '1.5fr 1fr 2fr' }}>
@@ -265,10 +307,17 @@ function MyComponent() {
           ) : (
             checks.map((check) => (
               <Card key={check._id} className="p-5 bg-white rounded-lg shadow-md">
-                <header style={{ fontFamily: 'Montserrat-Bold', fontSize: '25px' }} className="mb-5 gap-5 pr-20 text-slate-800 font-semibold leading-6 max-md:flex-wrap max-md:pr-5 max-md:max-w-full">
-                  Detail Checks
-                </header>
-                <p style={{ fontFamily: 'Montserrat-Regular', fontSize: '17px', fontWeight: '400' }} className="mb-5 text-neutral-500">Berikut detail medical record yang kamu buat!</p>
+                <div className="flex justify-between mb-5">
+                  <div className="flex flex-col">
+                    <header style={{ fontFamily: 'Montserrat-Bold', fontSize: '25px' }} className="mb-2 gap-5 pr-20 text-slate-800 font-semibold leading-6 max-md:flex-wrap max-md:pr-5 max-md:max-w-full">
+                      Detail Checks
+                    </header>
+                    <p style={{ fontFamily: 'Montserrat-Regular', fontSize: '17px', fontWeight: '400' }} className="text-neutral-500">Berikut detail medical record yang kamu buat!</p>
+                  </div>
+                    <button className="px-10 py-4 text-sm font-bold tracking-wide leading-5 text-center text-white hover:bg-gray-900 whitespace-nowrap bg-gray-600 rounded-md" style={{ fontFamily: 'Montserrat-Bold' }} onClick={handleSendEmail}>
+                      Send to Email
+                    </button>
+                </div>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <p className="mb-2 font-bold text-gray-700 lg:text-lg xl:text-1xl" style={{ fontFamily: 'Montserrat-Bold' }}><u>Symptoms</u></p>
