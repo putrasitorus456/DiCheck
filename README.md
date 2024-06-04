@@ -1,10 +1,12 @@
 # DiCheck
 DiCheck (meDical Check) merupakan suatu platform yang digunakan untuk mengembangkan layanan untuk prediksi penyakit berdasarkan input dari pengguna. Terdapat informasi saran pengobatan, obat, serta saran dari dokter terkait dengan perawatan.
 
-### 👩🏻  Kelompok NT (NineTeen)  👦🏻 
-- Ketua Kelompok  : Putra Agung A.M. Sitorus - 21/474928/TK/52423
-- Anggota 1       : Salwa Maharani - 21/481194/TK/53113
-- Anggota 2       : Yasmine 'Arfa Zahira - 21/478786/TK/52758
+### 👩🏻  Kelompok Besar 5  👦🏻 
+- Kelompok 18 (Valentinus Wastu Rosari, Zildiray Alfirli)
+- Kelompok 19 (Diestra Pradana Duta Ramadhan, Ega Rizky Setiawan, Daffa Kamal)
+- Kelompok 20 (Putra Agung A. M. Sitorus, Rico Frijaya S. Pane)
+- Kelompok 21 (Izzat Arroyyan, Antonius Daiva Prabawisesa, Muhammad Ismail Azmi)
+- Kelompok 28 (Aly Murry Darmoko, Nikolas Galih Saputro)
 
 ## How to Run in Local
 
@@ -27,7 +29,7 @@ npm run dev
 AI:
 
 ```bash
-cd '.\dataset fix dicheck\'
+cd '.\dataset_fix_dicheck\'
 python -m venv venv
 venv\Scripts\activate 
 pip install -r requirements.txt
