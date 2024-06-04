@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = React.useRef(null);
-  const [userName, setUserName] = useState('Loading...');
+  const [userName, setUserName] = useState("Loading...");
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -22,9 +22,9 @@ function Navbar() {
   };
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
-      router.push('/login');
+      router.push("/login");
     } else {
       setLoading(false);
       setUserId(user._id);
@@ -44,9 +44,11 @@ function Navbar() {
   useEffect(() => {
     const fetchProfile = async () => {
       if (userId) {
-        const res = await axios.get(`http://localhost:8080/api/user/one/${userId}`);
+        const res = await axios.get(
+          `http://localhost:8080/api/user/one/${userId}`
+        );
         console.log(res.data);
-        setUserName(res.data.first_name + ' ' + res.data.last_name);
+        setUserName(res.data.first_name + " " + res.data.last_name);
       }
     };
 
@@ -63,11 +65,28 @@ function Navbar() {
             className="shrink-0 w-12 aspect-square"
             alt="DiCheck logo"
           />
-          <div style={{ fontFamily: 'Montserrat-Bold', fontSize: '20px' }} className="my-auto">
+          <div
+            style={{ fontFamily: "Montserrat-Bold", fontSize: "20px" }}
+            className="my-auto"
+          >
             <a href="/homepage">DiCheck</a>
           </div>
-          <div style={{ borderLeft: '3px solid #2d3748', height: '30px', alignSelf: 'center' }}></div>
-          <div style={{ fontFamily: 'Montserrat-Regular', fontSize: '18 px', fontWeight: '400', letterSpacing: '1px' }} className="my-auto text-neutral-500">
+          <div
+            style={{
+              borderLeft: "3px solid #2d3748",
+              height: "30px",
+              alignSelf: "center",
+            }}
+          ></div>
+          <div
+            style={{
+              fontFamily: "Montserrat-Regular",
+              fontSize: "18 px",
+              fontWeight: "400",
+              letterSpacing: "1px",
+            }}
+            className="my-auto text-neutral-500"
+          >
             <p>Your trusted health partner</p>
           </div>
         </div>
@@ -80,9 +99,17 @@ function Navbar() {
             className="shrink-0 self-stretch w-12 aspect-square"
             alt="User Avatar"
           />
-          <div style={{ fontFamily: 'Montserrat-Bold', fontSize: '15px' }} className="text-slate-800 self-stretch my-auto mr-8">
+          <div
+            style={{ fontFamily: "Montserrat-Bold", fontSize: "15px" }}
+            className="text-slate-800 self-stretch my-auto mr-8"
+          >
             <p>{userName}</p>
-            <p className="text-neutral-500" style={{fontFamily: 'Montserrat-Light'}}>User</p>
+            <p
+              className="text-neutral-500"
+              style={{ fontFamily: "Montserrat-Light" }}
+            >
+              User
+            </p>
           </div>
           <img
             onClick={toggleDropdown}
@@ -92,8 +119,22 @@ function Navbar() {
             alt="Dropdown Icon"
           />
           {isOpen && (
-            <div style={{fontFamily: 'Montserrat-Semibold', top: '2em', right: '0'}} ref={dropdownRef} className="absolute w-48 py-2 mt-2 bg-white rounded-md shadow-xl">
-              <a href="/" className="block px-4 py-2 text-gray-800 hover:bg-slate-800 hover:text-white" onClick={() => localStorage.removeItem('user')}>Log Out</a>
+            <div
+              style={{
+                fontFamily: "Montserrat-Semibold",
+                top: "2em",
+                right: "0",
+              }}
+              ref={dropdownRef}
+              className="absolute w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
+            >
+              <a
+                href="/"
+                className="block px-4 py-2 text-gray-800 hover:bg-slate-800 hover:text-white"
+                onClick={() => localStorage.removeItem("user")}
+              >
+                Log Out
+              </a>
             </div>
           )}
         </div>
@@ -114,7 +155,9 @@ export async function getServerSideProps(context) {
   const { id } = context.params;
 
   try {
-    const res = await axios.get(`http://localhost:8080/api/record/record/${id}`);
+    const res = await axios.get(
+      `http://localhost:8080/api/record/record/${id}`
+    );
     const check = res.data;
 
     if (!check) {
@@ -149,9 +192,9 @@ function MyComponent() {
   const [surprise, setSurprise] = useState(false); // Pindahkan ke sini
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
-      router.push('/login');
+      router.push("/login");
     } else {
       setLoading(false);
       setUserId(user._id);
@@ -163,10 +206,12 @@ function MyComponent() {
     async function fetchChecks() {
       if (id) {
         try {
-          const response = await axios.get(`http://localhost:8080/api/record/record/${id}`);
+          const response = await axios.get(
+            `http://localhost:8080/api/record/record/${id}`
+          );
           setChecks(response.data);
         } catch (error) {
-          console.error('Error fetching check records:', error);
+          console.error("Error fetching check records:", error);
         }
       }
     }
@@ -178,10 +223,12 @@ function MyComponent() {
     async function fetchTotalChecks() {
       if (userId) {
         try {
-          const response = await axios.get(`http://localhost:8080/api/record/total/${userId}`);
+          const response = await axios.get(
+            `http://localhost:8080/api/record/total/${userId}`
+          );
           setTotalChecks(response.data.totalRecords);
         } catch (error) {
-          console.error('Error fetching total checks:', error);
+          console.error("Error fetching total checks:", error);
         }
       }
     }
@@ -189,10 +236,12 @@ function MyComponent() {
     async function fetchTotalChecksToday() {
       if (userId) {
         try {
-          const response = await axios.get(`http://localhost:8080/api/record/total_today/${userId}`);
+          const response = await axios.get(
+            `http://localhost:8080/api/record/total_today/${userId}`
+          );
           setTotalChecksToday(response.data.totalRecords);
         } catch (error) {
-          console.error('Error fetching total checks today:', error);
+          console.error("Error fetching total checks today:", error);
         }
       }
     }
@@ -200,10 +249,12 @@ function MyComponent() {
     async function fetchLatestCheckTime() {
       if (userId) {
         try {
-          const response = await axios.get(`http://localhost:8080/api/record/latest_record/${userId}`);
+          const response = await axios.get(
+            `http://localhost:8080/api/record/latest_record/${userId}`
+          );
           setLastCheckTime(response.data.latestRecordTime);
         } catch (error) {
-          console.error('Error fetching latest check time:', error);
+          console.error("Error fetching latest check time:", error);
         }
       }
     }
@@ -260,42 +311,114 @@ function MyComponent() {
   }
 
   const date = new Date(lastCheckTime);
-  const formattedDate = date.toLocaleDateString('id-ID');
+  const formattedDate = date.toLocaleDateString("id-ID");
+
+  const searchMedicine = (medicineName) => {
+    fetch(`https://google-search-iai.vercel.app/search/${medicineName}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.url) {
+          window.open(data.url, "_blank");
+        }
+      })
+      .catch((error) => console.error("Error", error.message));
+  };
 
   return (
     <div className="flex flex-col p-10 bg-slate-50 max-md:px-5">
       <ToastContainer />
       <Navbar />
       <section className="px-8 py-8 mt-10 bg-white rounded-3xl border border-violet-100 border-solid shadow-sm max-md:px-5 max-md:mt-10 max-md:max-w-full">
-        <div className="grid grid-cols-3 gap-5 max-md:flex-col max-md:gap-0" style={{ gridTemplateColumns: '1.5fr 1fr 2fr' }}>
+        <div
+          className="grid grid-cols-3 gap-5 max-md:flex-col max-md:gap-0"
+          style={{ gridTemplateColumns: "1.5fr 1fr 2fr" }}
+        >
           <div className="flex flex-col w-[100%] max-md:ml-0 max-md:w-full">
             <header className="flex grow gap-5 font-medium max-md:mt-5">
-              <h2 style={{ fontFamily: 'Montserrat-Bold', fontSize: '25px' }} className="grow text-base leading-6 text-slate-800 w-fit">
+              <h2
+                style={{ fontFamily: "Montserrat-Bold", fontSize: "25px" }}
+                className="grow text-base leading-6 text-slate-800 w-fit"
+              >
                 Cek Sekarang
               </h2>
             </header>
-            <p style={{ fontFamily: 'Montserrat-Regular', fontSize: '17px', fontWeight: '400' }} className="text-neutral-500 mt-5">Segera cek gejala dan berikan penanganan awal</p>
-            <p style={{ fontFamily: 'Montserrat-Regular', fontSize: '17px', fontWeight: '400' }} className="text-neutral-500 mt-2">DiCheck siap membantu!</p>
+            <p
+              style={{
+                fontFamily: "Montserrat-Regular",
+                fontSize: "17px",
+                fontWeight: "400",
+              }}
+              className="text-neutral-500 mt-5"
+            >
+              Segera cek gejala dan berikan penanganan awal
+            </p>
+            <p
+              style={{
+                fontFamily: "Montserrat-Regular",
+                fontSize: "17px",
+                fontWeight: "400",
+              }}
+              className="text-neutral-500 mt-2"
+            >
+              DiCheck siap membantu!
+            </p>
           </div>
           <div className="flex flex-col items-center justify-center">
             <Link href="/check-disease">
-              <button className="px-10 py-4 text-sm font-bold tracking-wide leading-5 text-center text-white hover:bg-gray-900 whitespace-nowrap bg-gray-600 rounded-md max-md:px-5 max-md:mt-10 max-md:max-w-full" style={{ fontFamily: 'Montserrat-Bold', alignSelf: 'center', marginTop: '20px' }}>
+              <button
+                className="px-10 py-4 text-sm font-bold tracking-wide leading-5 text-center text-white hover:bg-gray-900 whitespace-nowrap bg-gray-600 rounded-md max-md:px-5 max-md:mt-10 max-md:max-w-full"
+                style={{
+                  fontFamily: "Montserrat-Bold",
+                  alignSelf: "center",
+                  marginTop: "20px",
+                }}
+              >
                 Check Now
               </button>
             </Link>
           </div>
           <div className="grid grid-cols-3 gap-3 max-md:mt-5">
             <div className="box flex flex-col items-center justify-center">
-              <p style={{ fontFamily: 'Montserrat-Semibold' }} className="mb-5 grow text-base leading-6 text-slate-800 w-fit text-sm md:text-base lg:text-lg xl:text-0.5xl">Total checks today</p>
-              <p style={{ fontFamily: 'Montserrat-Light' }} className="grow leading-6 text-slate-800 w-fit text-1xl md:text-3xl lg:text-4xl xl:text-4xl">{totalChecksToday}</p>
+              <p
+                style={{ fontFamily: "Montserrat-Semibold" }}
+                className="mb-5 grow text-base leading-6 text-slate-800 w-fit text-sm md:text-base lg:text-lg xl:text-0.5xl"
+              >
+                Total checks today
+              </p>
+              <p
+                style={{ fontFamily: "Montserrat-Light" }}
+                className="grow leading-6 text-slate-800 w-fit text-1xl md:text-3xl lg:text-4xl xl:text-4xl"
+              >
+                {totalChecksToday}
+              </p>
             </div>
             <div className="box flex flex-col items-center justify-center">
-              <p style={{ fontFamily: 'Montserrat-Semibold' }} className="mb-5 grow leading-6 text-slate-800 w-fit text-sm md:text-base lg:text-lg xl:text-0.5xl">Last check time</p>
-              <p style={{ fontFamily: 'Montserrat-Light' }} className="grow leading-6 text-slate-800 w-fit text-1xl md:text-3xl lg:text-4xl xl:text-4xl">{formattedDate}</p>
+              <p
+                style={{ fontFamily: "Montserrat-Semibold" }}
+                className="mb-5 grow leading-6 text-slate-800 w-fit text-sm md:text-base lg:text-lg xl:text-0.5xl"
+              >
+                Last check time
+              </p>
+              <p
+                style={{ fontFamily: "Montserrat-Light" }}
+                className="grow leading-6 text-slate-800 w-fit text-1xl md:text-3xl lg:text-4xl xl:text-4xl"
+              >
+                {formattedDate}
+              </p>
             </div>
             <div className="box flex flex-col items-center justify-center">
-              <p style={{ fontFamily: 'Montserrat-Semibold' }} className="mb-5 grow leading-6 text-slate-800 w-fit text-sm md:text-base lg:text-lg xl:text-0.5xl">Total checks</p>
-              <p style={{ fontFamily: 'Montserrat-Light' }} className="grow leading-6 text-slate-800 w-fit text-1xl md:text-2xl lg:text-4xl xl:text-4xl">{totalChecks}</p>
+              <p
+                style={{ fontFamily: "Montserrat-Semibold" }}
+                className="mb-5 grow leading-6 text-slate-800 w-fit text-sm md:text-base lg:text-lg xl:text-0.5xl"
+              >
+                Total checks
+              </p>
+              <p
+                style={{ fontFamily: "Montserrat-Light" }}
+                className="grow leading-6 text-slate-800 w-fit text-1xl md:text-2xl lg:text-4xl xl:text-4xl"
+              >
+                {totalChecks}
+              </p>
             </div>
           </div>
         </div>
@@ -319,68 +442,174 @@ function MyComponent() {
                     </button>
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p className="mb-2 font-bold text-gray-700 lg:text-lg xl:text-1xl" style={{ fontFamily: 'Montserrat-Bold' }}><u>Symptoms</u></p>
-                  <ul className="ml-5 text-gray-600 lg:text-lg xl:text-0.5xl" style={{ fontFamily: 'Montserrat-Regular', listStyleType: 'square' }}>
-                    {check.symptoms.map((symptom, index) => (
-                      <li key={index}>{symptom.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</li>
-                    ))}
-                  </ul>
-                </div>
                   <div>
-                    <p className="mb-2 font-bold text-gray-700 lg:text-lg xl:text-1xl" style={{ fontFamily: 'Montserrat-Bold' }}><u>Disease</u></p>
-                    <p className="text-gray-600 lg:text-lg xl:text-3xl" style={{ fontFamily: 'Montserrat-Bold' }}>{check.disease}</p>
-                    <p className="mt-2 text-gray-600 lg:text-lg xl:text-1xl" style={{ fontFamily: 'Montserrat-Regular' }}>{check.description}</p>
+                    <p
+                      className="mb-2 font-bold text-gray-700 lg:text-lg xl:text-1xl"
+                      style={{ fontFamily: "Montserrat-Bold" }}
+                    >
+                      <u>Symptoms</u>
+                    </p>
+                    <ul
+                      className="ml-5 text-gray-600 lg:text-lg xl:text-0.5xl"
+                      style={{
+                        fontFamily: "Montserrat-Regular",
+                        listStyleType: "square",
+                      }}
+                    >
+                      {check.symptoms.map((symptom, index) => (
+                        <li key={index}>
+                          {symptom
+                            .replace(/_/g, " ")
+                            .replace(/\b\w/g, (l) => l.toUpperCase())}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                   <div>
-                    <p className="mb-2 font-bold text-gray-700 lg:text-lg xl:text-1xl" style={{ fontFamily: 'Montserrat-Bold' }}><u>Treatment Advice</u></p>
-                    <ul className="ml-5 text-gray-600 lg:text-lg xl:text-0.5xl" style={{ fontFamily: 'Montserrat-Regular', listStyleType: 'square' }}>
+                    <p
+                      className="mb-2 font-bold text-gray-700 lg:text-lg xl:text-1xl"
+                      style={{ fontFamily: "Montserrat-Bold" }}
+                    >
+                      <u>Disease</u>
+                    </p>
+                    <p
+                      className="text-gray-600 lg:text-lg xl:text-3xl"
+                      style={{ fontFamily: "Montserrat-Bold" }}
+                    >
+                      {check.disease}
+                    </p>
+                    <p
+                      className="mt-2 text-gray-600 lg:text-lg xl:text-1xl"
+                      style={{ fontFamily: "Montserrat-Regular" }}
+                    >
+                      {check.description}
+                    </p>
+                  </div>
+                  <div>
+                    <p
+                      className="mb-2 font-bold text-gray-700 lg:text-lg xl:text-1xl"
+                      style={{ fontFamily: "Montserrat-Bold" }}
+                    >
+                      <u>Treatment Advice</u>
+                    </p>
+                    <ul
+                      className="ml-5 text-gray-600 lg:text-lg xl:text-0.5xl"
+                      style={{
+                        fontFamily: "Montserrat-Regular",
+                        listStyleType: "square",
+                      }}
+                    >
                       {check.recommendations.map((recommendation, index) => (
-                        <li key={index}>{recommendation.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</li>
+                        <li key={index}>
+                          {recommendation
+                            .replace(/_/g, " ")
+                            .replace(/\b\w/g, (l) => l.toUpperCase())}
+                        </li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <p className="mb-2 font-bold text-gray-700 lg:text-lg xl:text-1xl" style={{ fontFamily: 'Montserrat-Bold' }}><u>Medicine Name</u></p>
-                    <ul className="ml-5 text-gray-600 lg:text-lg xl:text-0.5xl" style={{ fontFamily: 'Montserrat-Regular', listStyleType: 'square' }}>
+                    <p
+                      className="mb-2 font-bold text-gray-700 lg:text-lg xl:text-1xl"
+                      style={{ fontFamily: "Montserrat-Bold" }}
+                    >
+                      <u>Medicine Name</u> (click the medicine name to search on
+                      Google)
+                    </p>
+
+                    <ul
+                      className="ml-5 text-gray-600 lg:text-lg xl:text-0.5xl"
+                      style={{
+                        fontFamily: "Montserrat-Regular",
+                        listStyleType: "square",
+                      }}
+                    >
                       {check.medications.map((medication, index) => (
-                        <li key={index}>{medication.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</li>
+                        <li
+                          key={index}
+                          onClick={() => searchMedicine(medication)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {medication
+                            .replace(/_/g, " ")
+                            .replace(/\b\w/g, (l) => l.toUpperCase())}
+                        </li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <p className="mt-5 mb-2 font-bold text-gray-700 lg:text-lg xl:text-1xl" style={{ fontFamily: 'Montserrat-Bold' }}><u>Keterangan</u></p>
-                    <p className="text-gray-600 lg:text-lg xl:text-1xl text-gray-600" style={{ fontFamily: 'Montserrat-Regular' }}>
-                      Kamu menerima detail check ini pada tanggal {new Date(check.record_date).toLocaleDateString('id-ID')} di pukul {new Date(check.record_date).toLocaleTimeString('id-ID')}
+                    <p
+                      className="mt-5 mb-2 font-bold text-gray-700 lg:text-lg xl:text-1xl"
+                      style={{ fontFamily: "Montserrat-Bold" }}
+                    >
+                      <u>Keterangan</u>
+                    </p>
+                    <p
+                      className="text-gray-600 lg:text-lg xl:text-1xl text-gray-600"
+                      style={{ fontFamily: "Montserrat-Regular" }}
+                    >
+                      Kamu menerima detail check ini pada tanggal{" "}
+                      {new Date(check.record_date).toLocaleDateString("id-ID")}{" "}
+                      di pukul{" "}
+                      {new Date(check.record_date).toLocaleTimeString("id-ID")}
                     </p>
                   </div>
                   <div>
-                    <p className="mt-5 mb-2 font-bold text-pink-500 lg:text-lg xl:text-1xl" style={{ fontFamily: 'Montserrat-Bold' }}><u>Love Message</u></p>
-                    <p className="text-gray-600 lg:text-lg xl:text-1xl text-gray-600" style={{ fontFamily: 'Montserrat-Regular' }}>
-                      <span role="img" aria-label="sparkling-heart">💖</span> Kami ada sedikit hadiah untuk kamu, diklik ya! <span role="img" aria-label="sparkling-heart">💖</span>
+                    <p
+                      className="mt-5 mb-2 font-bold text-pink-500 lg:text-lg xl:text-1xl"
+                      style={{ fontFamily: "Montserrat-Bold" }}
+                    >
+                      <u>Love Message</u>
                     </p>
-                    <button className="mt-2 px-4 py-2 text-white bg-pink-500 rounded hover:bg-pink-400" style={{ fontFamily: 'Montserrat-Bold' }} onClick={handleClick}>
+                    <p
+                      className="text-gray-600 lg:text-lg xl:text-1xl text-gray-600"
+                      style={{ fontFamily: "Montserrat-Regular" }}
+                    >
+                      <span role="img" aria-label="sparkling-heart">
+                        💖
+                      </span>{" "}
+                      Kami ada sedikit hadiah untuk kamu, diklik ya!{" "}
+                      <span role="img" aria-label="sparkling-heart">
+                        💖
+                      </span>
+                    </p>
+                    <button
+                      className="mt-2 px-4 py-2 text-white bg-pink-500 rounded hover:bg-pink-400"
+                      style={{ fontFamily: "Montserrat-Bold" }}
+                      onClick={handleClick}
+                    >
                       Click for surprise
                     </button>
 
                     {surprise && (
-                      <motion.div 
-                        style={{ 
-                          position: 'fixed', 
-                          top: 0, 
-                          left: 0, 
-                          width: '100vw', 
-                          height: '100vh', 
-                          background: 'rgba(255, 192, 203, 1.0)', 
-                          display: 'flex', 
-                          justifyContent: 'center', 
-                          alignItems: 'center', 
-                          zIndex: 9999, 
+                      <motion.div
+                        style={{
+                          position: "fixed",
+                          top: 0,
+                          left: 0,
+                          width: "100vw",
+                          height: "100vh",
+                          background: "rgba(255, 192, 203, 1.0)",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          zIndex: 9999,
                         }}
                         animate={{ scale: [1, 1.15, 1] }}
-                        transition={{ duration: 1.5 }} 
+                        transition={{ duration: 1.5 }}
                       >
-                        <h1 style={{ fontFamily: 'Montserrat-Bold', color: 'white', fontSize: '5rem' }}>Semangat dan Cepat Sembuh!<span role="img" aria-label="sparkling-heart">💖</span></h1>
+                        <h1
+                          style={{
+                            fontFamily: "Montserrat-Bold",
+                            color: "white",
+                            fontSize: "5rem",
+                          }}
+                        >
+                          Semangat dan Cepat Sembuh!
+                          <span role="img" aria-label="sparkling-heart">
+                            💖
+                          </span>
+                        </h1>
                       </motion.div>
                     )}
                   </div>
